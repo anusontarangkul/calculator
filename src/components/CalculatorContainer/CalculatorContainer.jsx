@@ -1,6 +1,7 @@
 import React from 'react';
 import './CalculatorContainer.scss';
 import Container from '@mui/material/Container';
+import Display from '../Display/Display';
 
 const CalculatorContainer = () => {
   return (
@@ -10,10 +11,12 @@ const CalculatorContainer = () => {
         width: '70%',
         marginTop: 5,
         borderRadius: 5,
-        border: '4px solid #255585',
+        border: '4px solid black',
         boxShadow: 6,
       }}
-    ></Container>
+    >
+      <Display />
+    </Container>
   );
 };
 
