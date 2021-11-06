@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
@@ -7,6 +7,15 @@ import Display from '../Display/Display';
 import ButtonCalc from '../ButtonCalc/ButtonCalc';
 
 const CalculatorContainer = () => {
+  // state
+  const [displayValue, setDisplayValue] = useState('');
+
+  const handleBtnClick = (e) => {
+    e.preventDefault();
+    console.log('click');
+    // setDisplayValue(displayValue);
+  };
+
   const btnInfo = [
     {
       value: 'AC',
@@ -81,7 +90,7 @@ const CalculatorContainer = () => {
         marginTop: 10,
       }}
     >
-      <Display />
+      <Display displayValue={displayValue} setDisplayValue={setDisplayValue} />
       <Grid
         container
         spacing={5}
@@ -90,10 +99,14 @@ const CalculatorContainer = () => {
           justifyContent: 'center',
         }}
       >
-        {btnInfo.map((btn) => {
+        {btnInfo.map((btn, idx) => {
           return (
-            <Grid item key={btn.value}>
-              <ButtonCalc btn={btn} key={btn.value} />
+            <Grid item key={idx}>
+              <ButtonCalc
+                btn={btn}
+                displayValue={displayValue}
+                setDisplayValue={setDisplayValue}
+              />
             </Grid>
           );
         })}

@@ -1,8 +1,10 @@
 import React from 'react';
-import { render, } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 
 import ButtonCalc from '../ButtonCalc'
+
+// Design Tests
 
 test('value of equal sign is displayed on button', () => {
     const { getByTestId } = render(<ButtonCalc btn={{ value: "=" }} />);

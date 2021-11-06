@@ -1,9 +1,17 @@
 import React from 'react';
 import Button from '@mui/material/Button';
 
-const ButtonCalc = ({ btn }) => {
+const ButtonCalc = ({ btn, setDisplayValue, displayValue }) => {
+  const handleBtnClick = () => {
+    if (btn.value === 'AC') {
+      setDisplayValue('');
+      return;
+    }
+    setDisplayValue(displayValue + btn.value);
+  };
   return (
     <Button
+      onClick={handleBtnClick}
       data-testid={btn.value}
       //   variant='outlined'
       sx={{
