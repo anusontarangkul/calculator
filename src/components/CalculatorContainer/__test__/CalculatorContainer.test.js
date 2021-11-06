@@ -16,4 +16,16 @@ describe('CalculatorComponent', () => {
         expect(displayEl.textContent).toBe('7')
     })
 
+    test('When "AC is clicked, the display is cleared', () => {
+        const { getByTestId } = render(<CaclulatorContainer />)
+        const num7El = screen.getByText('7')
+        const displayEl = getByTestId('display')
+        const acEL = screen.getByText('AC')
+
+        fireEvent.click(num7El)
+        fireEvent.click(acEL)
+
+        expect(displayEl.textContent).toBe('')
+    })
+
 })
