@@ -82,8 +82,6 @@ const ButtonCalc = ({ btn, setDisplayValue, displayValue }) => {
     <Button
       onClick={handleBtnClick}
       data-testid={btn.value}
-      // disableTouchRipple
-      //   variant='outlined'
       sx={{
         minHeight: 95,
         minWidth: 95,

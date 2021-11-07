@@ -1,10 +1,10 @@
-
 import { render, screen, fireEvent } from '@testing-library/react';
 
 import CaclulatorContainer from '../CalculatorContainer'
 
 describe('CalculatorComponent', () => {
 
+    // Integration Tests
 
     test('When a number is clicked, it is concatenated to display', () => {
         const { getByTestId } = render(<CaclulatorContainer />)

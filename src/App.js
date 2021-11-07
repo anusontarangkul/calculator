@@ -1,4 +1,3 @@
-// Component imports
 import CalculatorContainer from './components/CalculatorContainer/CalculatorContainer';
 
 function App() {

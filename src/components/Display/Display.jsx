@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
+
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 
-const Display = ({ displayValue, setDisplayValue }) => {
-  // const [displayValue, setDisplayValue] = useState('');
-
+const Display = ({ displayValue }) => {
   return (
     <Container
       sx={{
