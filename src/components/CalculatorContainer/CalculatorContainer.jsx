@@ -10,12 +10,6 @@ const CalculatorContainer = () => {
   // state
   const [displayValue, setDisplayValue] = useState('');
 
-  const handleBtnClick = (e) => {
-    e.preventDefault();
-    console.log('click');
-    // setDisplayValue(displayValue);
-  };
-
   const btnInfo = [
     {
       value: 'AC',
@@ -66,13 +60,13 @@ const CalculatorContainer = () => {
       value: '+',
     },
     {
-      value: ')',
+      value: '0',
     },
     {
       value: '.',
     },
     {
-      value: '+/-',
+      value: '^',
     },
     {
       value: '=',

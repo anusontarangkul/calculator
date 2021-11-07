@@ -7,8 +7,19 @@ const ButtonCalc = ({ btn, setDisplayValue, displayValue }) => {
       setDisplayValue('');
       return;
     }
+    if (btn.value === '=') {
+      calculateNum(displayValue);
+      return;
+    }
+
     setDisplayValue(displayValue + btn.value);
   };
+
+  const calculateNum = (expression) => {
+    const evaluatedNum = Function(`'use strict'; return (${expression})`)();
+    setDisplayValue(evaluatedNum);
+  };
+
   return (
     <Button
       onClick={handleBtnClick}
