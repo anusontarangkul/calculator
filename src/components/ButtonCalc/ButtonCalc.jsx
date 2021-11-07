@@ -3,16 +3,20 @@ import Button from '@mui/material/Button';
 
 const ButtonCalc = ({ btn, setDisplayValue, displayValue }) => {
   const handleBtnClick = () => {
-    if (btn.value === 'AC') {
-      setDisplayValue('');
-      return;
+    switch (btn.value) {
+      case 'AC':
+        setDisplayValue('');
+        return;
+      case '=':
+        calculateNum(displayValue);
+        return;
+      case '^':
+        setDisplayValue(displayValue + '**');
+        return;
+      default:
+        setDisplayValue(displayValue + btn.value);
+        return;
     }
-    if (btn.value === '=') {
-      calculateNum(displayValue);
-      return;
-    }
-
-    setDisplayValue(displayValue + btn.value);
   };
 
   const calculateNum = (expression) => {
