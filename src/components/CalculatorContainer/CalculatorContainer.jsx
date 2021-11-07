@@ -83,7 +83,8 @@ const CalculatorContainer = () => {
         marginTop: 10,
       }}
     >
-      <Display displayValue={displayValue} setDisplayValue={setDisplayValue} />
+      {/* Create display component that only displays the current value  */}
+      <Display displayValue={displayValue} />
       <Grid
         container
         spacing={5}
@@ -92,6 +93,7 @@ const CalculatorContainer = () => {
           justifyContent: 'center',
         }}
       >
+        {/* Create each button inside grid container */}
         {btnInfo.map((btn, idx) => {
           return (
             <Grid item key={idx}>

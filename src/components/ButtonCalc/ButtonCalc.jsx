@@ -3,6 +3,8 @@ import Button from '@mui/material/Button';
 
 const ButtonCalc = ({ btn, setDisplayValue, displayValue }) => {
   const handleBtnClick = () => {
+    // cases for the different types of buttons when `=` is pressed
+    // default is to append the value in button to display
     switch (btn.value) {
       case 'AC':
         setDisplayValue('');
@@ -48,16 +50,22 @@ const ButtonCalc = ({ btn, setDisplayValue, displayValue }) => {
 
   const calculateNum = (expression) => {
     try {
+      // replace ^ with **
       const updatedExpression = expression.replace('^', '**');
+
+      // calulate the display value
       const evaluatedNum = Function(
         `'use strict'; return (${updatedExpression})`
       )();
       setDisplayValue(evaluatedNum);
     } catch (error) {
+      // if there is an error, display empty screen
       setDisplayValue('');
     }
   };
 
+  // checks to see if previous character was a operator
+  // prevents another operator to be entered consecutively.
   const consecutiveOperatorError = (expression) => {
     const lastChar = expression[expression.length - 1];
     if (
@@ -73,6 +81,8 @@ const ButtonCalc = ({ btn, setDisplayValue, displayValue }) => {
     }
   };
 
+  // checks to see if previous character was a decimal
+  // prevents another decimal to be entered consecutively.
   const consecutiveDecimalError = (expression) => {
     const lastChar = expression[expression.length - 1];
     return lastChar === '.';
@@ -81,7 +91,7 @@ const ButtonCalc = ({ btn, setDisplayValue, displayValue }) => {
   return (
     <Button
       onClick={handleBtnClick}
-      data-testid={btn.value}
+      // render different design style for '=' button
       sx={{
         minHeight: 95,
         minWidth: 95,
@@ -91,7 +101,6 @@ const ButtonCalc = ({ btn, setDisplayValue, displayValue }) => {
         border: btn.value === '=' ? '2px solid black' : '2px solid #6CC3F7',
         background: btn.value === '=' ? '#6CC3F7' : 'white',
       }}
-      className='ripple'
     >
       {btn.value}
     </Button>

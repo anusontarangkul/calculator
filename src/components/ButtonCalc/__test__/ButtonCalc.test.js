@@ -1,44 +1,47 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 
-import ButtonCalc from '../ButtonCalc'
+import ButtonCalc from '../ButtonCalc';
 
 // Design Unit Tests
 
-test('value of equal sign is displayed on button', () => {
-    const { getByTestId } = render(<ButtonCalc btn={{ value: "=" }} />);
+describe('ButtonCalc', () => {
+    test('value of equal sign is displayed on button', () => {
+        render(<ButtonCalc btn={{ value: "=" }} />);
 
-    const equalEl = getByTestId('=')
-    expect(equalEl.textContent).toBe('=')
-});
+        const equalEl = screen.getByText('=');
+        expect(equalEl).toBeInTheDocument();
+    });
 
-test('The equal button has blue background', () => {
-    const { getByTestId } = render(<ButtonCalc btn={{ value: "=" }} />);
+    test('The equal button has blue background', () => {
+        render(<ButtonCalc btn={{ value: "=" }} />);
 
-    const equalEl = getByTestId('=')
-    expect(equalEl).toHaveStyle(`background: #6CC3F7`)
-});
+        const equalEl = screen.getByText('=');
+        expect(equalEl).toHaveStyle(`background: #6CC3F7`);
+    });
 
-test('The equal button is a square', () => {
-    const { getByTestId } = render(<ButtonCalc btn={{ value: "=" }} />);
+    test('The equal button is a square', () => {
+        render(<ButtonCalc btn={{ value: "=" }} />);
 
-    const equalEl = getByTestId('=')
-    expect(equalEl).toHaveStyle(`borderRadius: 0`)
-});
+        const equalEl = screen.getByText('=');
+        expect(equalEl).toHaveStyle(`borderRadius: 0`);
+    });
 
-test('The number 7 button has a white background', () => {
-    const { getByTestId } = render(<ButtonCalc btn={{ value: "7" }} />);
+    test('The number 7 button has a white background', () => {
+        render(<ButtonCalc btn={{ value: "7" }} />);
 
-    const sevenEl = getByTestId('7')
-    expect(sevenEl).toHaveStyle(`background: white`)
-});
+        const sevenEl = screen.getByText('7');
+        expect(sevenEl).toHaveStyle(`background: white`);
+    });
 
-test('The number 7 button is a circle', () => {
-    const { getByTestId } = render(<ButtonCalc btn={{ value: "7" }} />);
+    test('The number 7 button is a circle', () => {
+        render(<ButtonCalc btn={{ value: "7" }} />);
 
-    const sevenEl = getByTestId('7')
-    expect(sevenEl).toHaveStyle(`borderRadius: 50%`)
-});
+        const sevenEl = screen.getByText('7');
+        expect(sevenEl).toHaveStyle(`borderRadius: 50%`);
+    });
+})
+
 
 

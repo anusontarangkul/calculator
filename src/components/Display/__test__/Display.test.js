@@ -4,10 +4,14 @@ import Display from '../Display';
 import { render, } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 
-// unit test
+// Unit Test
 
-test('initial value of display is empty', () => {
-    const { getByTestId } = render(<Display />);
-    const displayEl = getByTestId('display')
-    expect(displayEl.textContent).toBe('')
-});
+describe('Display', () => {
+    test('initial value of display is empty', () => {
+        const { getByTestId } = render(<Display />);
+
+        const displayEl = getByTestId('display');
+
+        expect(displayEl.textContent).toBe('');
+    });
+})
