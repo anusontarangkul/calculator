@@ -101,4 +101,70 @@ describe('CalculatorComponent', () => {
 
     })
 
+    test('supports decimal arithmetic', () => {
+        const { getByTestId } = render(<CaclulatorContainer />)
+        const displayEl = getByTestId('display')
+        const num2El = screen.getByText('2')
+        const num0El = screen.getByText('0')
+        const num5El = screen.getByText('5')
+        const decimalEl = screen.getByText('.')
+        const additionEl = screen.getByText('+')
+        const equalEl = screen.getByText('=')
+
+        fireEvent.click(num2El)
+        fireEvent.click(decimalEl)
+        fireEvent.click(num2El)
+        fireEvent.click(num5El)
+        fireEvent.click(additionEl)
+        fireEvent.click(num2El)
+        fireEvent.click(decimalEl)
+        fireEvent.click(num5El)
+        fireEvent.click(num0El)
+        fireEvent.click(equalEl)
+
+        expect(displayEl.textContent).toBe('4.75')
+
+    })
+
+    test('prevents consecutive operator entry', () => {
+        const { getByTestId } = render(<CaclulatorContainer />)
+        const displayEl = getByTestId('display')
+        const num2El = screen.getByText('2')
+        const additionEl = screen.getByText('+')
+        const divisionEl = screen.getByText('/')
+
+        fireEvent.click(num2El)
+        fireEvent.click(additionEl)
+        fireEvent.click(divisionEl)
+
+        expect(displayEl.textContent).toBe('2+')
+    })
+
+    test('prevents consecutive decimal entry', () => {
+        const { getByTestId } = render(<CaclulatorContainer />)
+        const displayEl = getByTestId('display')
+        const num2El = screen.getByText('2')
+        const decimalEl = screen.getByText('.')
+
+
+        fireEvent.click(num2El)
+        fireEvent.click(decimalEl)
+        fireEvent.click(decimalEl)
+
+        expect(displayEl.textContent).toBe('2.')
+    })
+
+    test('displays empty screen if invalid expression is entered', () => {
+        const { getByTestId } = render(<CaclulatorContainer />)
+        const displayEl = getByTestId('display')
+        const num2El = screen.getByText('2')
+        const multiplicationlEl = screen.getByText('*')
+        const equalEl = screen.getByText('=')
+
+        fireEvent.click(num2El)
+        fireEvent.click(multiplicationlEl)
+        fireEvent.click(equalEl)
+
+        expect(displayEl.textContent).toBe('')
+    })
 })

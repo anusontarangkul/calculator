@@ -35,6 +35,11 @@ const ButtonCalc = ({ btn, setDisplayValue, displayValue }) => {
           ? setDisplayValue(displayValue)
           : setDisplayValue(displayValue + btn.value);
         return;
+      case '.':
+        consecutiveDecimalError(displayValue)
+          ? setDisplayValue(displayValue)
+          : setDisplayValue(displayValue + btn.value);
+        return;
       default:
         setDisplayValue(displayValue + btn.value);
         return;
@@ -42,11 +47,15 @@ const ButtonCalc = ({ btn, setDisplayValue, displayValue }) => {
   };
 
   const calculateNum = (expression) => {
-    const updatedExpression = expression.replace('^', '**');
-    const evaluatedNum = Function(
-      `'use strict'; return (${updatedExpression})`
-    )();
-    setDisplayValue(evaluatedNum);
+    try {
+      const updatedExpression = expression.replace('^', '**');
+      const evaluatedNum = Function(
+        `'use strict'; return (${updatedExpression})`
+      )();
+      setDisplayValue(evaluatedNum);
+    } catch (error) {
+      setDisplayValue('');
+    }
   };
 
   const consecutiveOperatorError = (expression) => {
@@ -62,6 +71,11 @@ const ButtonCalc = ({ btn, setDisplayValue, displayValue }) => {
     } else {
       return false;
     }
+  };
+
+  const consecutiveDecimalError = (expression) => {
+    const lastChar = expression[expression.length - 1];
+    return lastChar === '.';
   };
 
   return (
