@@ -1,70 +1,109 @@
-# Getting Started with Create React App
+# Calculator
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A calculator app built on React. .
 
-## Available Scripts
+![demo](./readme-images/demo.gif)
 
-In the project directory, you can run:
+## Table of Contents
 
-### `yarn start`
+|                                         |                                         |                                             |
+| :-------------------------------------: | :-------------------------------------: | :-----------------------------------------: |
+|       [Introduction](#calculator)       | [Table of Contents](#table-of-contents) | [Development Process](#development-process) |
+|             [Tests](#tests)             |        [Deployment](#deployment)        |    [Code Hightlights](#code-highlights)     |
+| [Technologies Used](#Technologies-Used) |           [Credits](#Credits)           |             [License](#License)             |
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Development Process
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+1. Created Mockup in Adobe XD.
 
-### `yarn test`
+![mockup](./readme-images/mockup.png)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+2. Used GitHub Projects and Branches to organize work flow.
 
-### `yarn build`
+![projects](./readme-images/github-projects.png)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+![branches](./readme-images/github-branches.png)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+3. Development
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+The three main components are CalculatorContainer, ButtonCalc, and Display. The CalculatorContainer is the the parent component that holds the state for the other 2. The Display component renders the value of the input and calculation to display. The ButtonCalc sets the display with onclick button that adds to the display, clears the display, or calculates it.
 
-### `yarn eject`
+There are two functions for error handling. One is `consecutiveOperatorError`, which prevents the user from entering an additional operator if the user's last entry was an operator. The other is `consecutiveDecimalError`, which prevents the user from entering an additional decimal if the user's last entry was an decimal.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+This error handling doesn't prevent all the possible invalid entries the user can made. If the calculation expression has an error, the display will display empty.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+4. Expressions
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Tests
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Unit tests and integration tests were created.
 
-## Learn More
+```
+npm test
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Deployment
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+[Deployed](https://calculator-react1.netlify.app/) using netlify.
 
-### Code Splitting
+## Code Highlights
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+When the user clicks on an operator to prevent errors, the code checks to see if the previous character was an operator. If it did, it returns true and prevents the user from entering the operator. Otherwise, the calculator proceeds as normal.
 
-### Analyzing the Bundle Size
+```JavaScript
+  const consecutiveOperatorError = (expression) => {
+    const lastChar = expression[expression.length - 1];
+    if (
+      lastChar === '/' ||
+      lastChar === '*' ||
+      lastChar === '+' ||
+      lastChar === '-' ||
+      lastChar === '^'
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Used custom JavaScript function to calculate expression to avoid using eval(). If there, is an error in the calculation, the display will be set to empty. A reggex is used to convert `^` to `**` so JavaScript can calculate exponents.
 
-### Making a Progressive Web App
+```JavaScript
+  const calculateNum = (expression) => {
+    try {
+      const updatedExpression = expression.replace('^', '**');
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+      const evaluatedNum = Function(
+        `'use strict'; return (${updatedExpression})`
+      )();
+      setDisplayValue(evaluatedNum);
+    } catch (error) {
+      setDisplayValue('');
+    }
+  };
+```
 
-### Advanced Configuration
+## Technologies Used
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### Front End Library
 
-### Deployment
+- [React](https://reactjs.org/)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+### UI Library
 
-### `yarn build` fails to minify
+- [MUI](https://mui.com/)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### Testing
+
+- [react-testing-library](https://reactjs.org/docs/testing.html)
+
+## Credits
+
+|                           |                                                                                                                                                                                                       |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **David Anusontarangkul** | [![Linkedin](https://i.stack.imgur.com/gVE0j.png) LinkedIn](https://www.linkedin.com/in/anusontarangkul/) [![GitHub](https://i.stack.imgur.com/tskMh.png) GitHub](https://github.com/anusontarangkul) |
+
+## License
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/

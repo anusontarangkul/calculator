@@ -4,6 +4,8 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 
 const Display = ({ displayValue }) => {
+  // displays the value for calculator
+
   return (
     <Container
       sx={{
