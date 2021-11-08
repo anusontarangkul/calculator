@@ -54,7 +54,8 @@ const ButtonCalc = ({ btn, setDisplayValue, displayValue }) => {
       const updatedExpression = expression.replace('^', '**');
 
       // calulate the display value
-      const evaluatedNum = Function(
+      // eslint-disable-next-line no-new-func
+      const evaluatedNum = new Function(
         `'use strict'; return (${updatedExpression})`
       )();
       setDisplayValue(evaluatedNum);
