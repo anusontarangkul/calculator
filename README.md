@@ -1,6 +1,8 @@
 # Calculator
 
-A calculator app built on React. .
+A calculator app built on React.
+
+[Video](https://youtu.be/K_0wkv1Jb5U) walkthrough.
 
 ![demo](./readme-images/demo.gif)
 
