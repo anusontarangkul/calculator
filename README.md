@@ -14,25 +14,23 @@ A calculator app built on React. .
 
 ## Development Process
 
-1. Created Mockup in Adobe XD.
+### Created Mockup in Adobe XD.
 
 ![mockup](./readme-images/mockup.png)
 
-2. Used GitHub Projects and Branches to organize work flow.
+### Used GitHub Projects and Branches to organize work flow.
 
 ![projects](./readme-images/github-projects.png)
 
 ![branches](./readme-images/github-branches.png)
 
-3. Development
+### Development
 
 The three main components are CalculatorContainer, ButtonCalc, and Display. The CalculatorContainer is the the parent component that holds the state for the other 2. The Display component renders the value of the input and calculation to display. The ButtonCalc sets the display with onclick button that adds to the display, clears the display, or calculates it.
 
 There are two functions for error handling. One is `consecutiveOperatorError`, which prevents the user from entering an additional operator if the user's last entry was an operator. The other is `consecutiveDecimalError`, which prevents the user from entering an additional decimal if the user's last entry was an decimal.
 
 This error handling doesn't prevent all the possible invalid entries the user can made. If the calculation expression has an error, the display will display empty.
-
-4. Expressions
 
 ## Tests
 
