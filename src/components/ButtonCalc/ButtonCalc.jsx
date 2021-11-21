@@ -60,21 +60,21 @@ const ButtonCalc = ({ btn, setDisplayValue, displayValue }) => {
     }
   };
 
-  const calculateSum = (plusSign, expression) => {
+  const calculateSum = (plusSignIndex, expression) => {
     let beginningSum = 0;
     let endingSum = expression.length - 1;
     // console.log('starting endsum', endingSum);
     // console.log('expression', expression);
     // console.log('plus', plusSign);
 
-    for (let i = plusSign + 1; i < expression.length; i++) {
+    for (let i = plusSignIndex + 1; i < expression.length; i++) {
       let currentChar = +expression[i];
       if (isNaN(currentChar)) {
         endingSum = i - 1;
         // console.log('endingSum', endingSum);
       }
     }
-    for (let i = plusSign - 1; i >= 0; i--) {
+    for (let i = plusSignIndex - 1; i >= 0; i--) {
       let currentChar = +expression[i];
       if (isNaN(currentChar)) {
         beginningSum = i + 1;
@@ -83,7 +83,7 @@ const ButtonCalc = ({ btn, setDisplayValue, displayValue }) => {
     }
     let expressionCalc = expression.substring(beginningSum, endingSum + 1);
     // console.log('expression', expressionCalc);
-    let addExpression = expression.split('+');
+    let addExpression = expressionCalc.split('+');
     let newSum = (+addExpression[0] + +addExpression[1]).toString();
     console.log('newSum', newSum);
     let substituteExpression = expression.replace(expressionCalc, newSum);
@@ -94,28 +94,128 @@ const ButtonCalc = ({ btn, setDisplayValue, displayValue }) => {
     // console.log('return exp', expression);
   };
 
-  // const iterator = (newExpression) => {
-  //   for (let i = 0; i < newExpression.length; i++) {
-  //     let num = expression[i];
-  //     switch (num) {
-  //       case '+':
-  //         newExpression = calculateSum(i, expression);
-  //         return calculateNum(newExpression);
+  const calculateDifference = (minusSignIndex, expression) => {
+    let beginningSum = 0;
+    let endingSum = expression.length - 1;
 
-  //         // calculateNum(expression);
-  //         // let addExpression = expression.split('+');
-  //         // newSum = +addExpression[0] + +addExpression[1];
-  //         break;
-  //       case '-':
-  //         let minusExpression = expression.split('-');
-  //         // newSum = +minusExpression[0] - +minusExpression[1];
-  //         break;
-  //       default:
-  //         break;
-  //     }
-  //   }
-  //   return newExpression;
-  // };
+    for (let i = minusSignIndex + 1; i < expression.length; i++) {
+      let currentChar = +expression[i];
+      if (isNaN(currentChar)) {
+        endingSum = i - 1;
+      }
+    }
+    for (let i = minusSignIndex - 1; i >= 0; i--) {
+      let currentChar = +expression[i];
+      if (isNaN(currentChar)) {
+        beginningSum = i + 1;
+      }
+    }
+    let expressionCalc = expression.substring(beginningSum, endingSum + 1);
+    let addExpression = expressionCalc.split('-');
+    let newSum = (+addExpression[0] - +addExpression[1]).toString();
+    console.log('newSum', newSum);
+    let substituteExpression = expression.replace(expressionCalc, newSum);
+    console.log('exp being sub', expressionCalc);
+    console.log('sub', substituteExpression);
+
+    return substituteExpression;
+  };
+
+  const calculateProduct = (multiplySignIndex, expression) => {
+    let beginningSum = 0;
+    let endingSum = expression.length - 1;
+
+    for (let i = multiplySignIndex + 1; i < expression.length; i++) {
+      let currentChar = +expression[i];
+      if (isNaN(currentChar)) {
+        endingSum = i - 1;
+      }
+    }
+    for (let i = multiplySignIndex - 1; i >= 0; i--) {
+      let currentChar = +expression[i];
+      if (isNaN(currentChar)) {
+        beginningSum = i + 1;
+      }
+    }
+    let expressionCalc = expression.substring(beginningSum, endingSum + 1);
+    let addExpression = expressionCalc.split('*');
+    let newSum = (+addExpression[0] * +addExpression[1]).toString();
+    console.log('newSum', newSum);
+    let substituteExpression = expression.replace(expressionCalc, newSum);
+    console.log('exp being sub', expressionCalc);
+    console.log('sub', substituteExpression);
+
+    return substituteExpression;
+  };
+
+  const calculateOperator = (multiplySignIndex, expression, operator) => {
+    let beginningSum = 0;
+    let endingSum = expression.length - 1;
+
+    for (let i = multiplySignIndex + 1; i < expression.length; i++) {
+      let currentChar = +expression[i];
+      if (isNaN(currentChar)) {
+        endingSum = i - 1;
+      }
+    }
+    for (let i = multiplySignIndex - 1; i >= 0; i--) {
+      let currentChar = +expression[i];
+      if (isNaN(currentChar)) {
+        beginningSum = i + 1;
+      }
+    }
+    let expressionCalc = expression.substring(beginningSum, endingSum + 1);
+    let addExpression;
+    let newSum;
+    switch (operator) {
+      case '+':
+        addExpression = expressionCalc.split('+');
+        newSum = (+addExpression[0] + +addExpression[1]).toString();
+        break;
+      case '-':
+        addExpression = expressionCalc.split('-');
+        newSum = (+addExpression[0] - +addExpression[1]).toString();
+        break;
+      case '*':
+        addExpression = expressionCalc.split('*');
+        newSum = (+addExpression[0] * +addExpression[1]).toString();
+        break;
+      case '/':
+        addExpression = expressionCalc.split('/');
+        newSum = (+addExpression[0] / +addExpression[1]).toString();
+        break;
+      default:
+        break;
+    }
+    let substituteExpression = expression.replace(expressionCalc, newSum);
+    return substituteExpression;
+  };
+
+  const calculate2nd = (expression) => {
+    let changes = false;
+    for (let i = 0; i < expression.length; i++) {
+      let num = expression[i];
+      switch (num) {
+        case '*':
+          expression = calculateOperator(i, expression, '*');
+          console.log('new exp before rec', expression);
+          changes = true;
+          break;
+        case '/':
+          expression = calculateOperator(i, expression, '/');
+          console.log('new exp before rec', expression);
+          changes = true;
+          break;
+        default:
+          break;
+      }
+    }
+    if (changes) {
+      return calculate2nd(expression);
+    } else {
+      return expression;
+    }
+  };
 
   const calculateNum = (expression) => {
     let changes = false;
@@ -124,18 +224,13 @@ const ButtonCalc = ({ btn, setDisplayValue, displayValue }) => {
         let num = expression[i];
         switch (num) {
           case '+':
-            expression = calculateSum(i, expression);
+            expression = calculateOperator(i, expression, '+');
             console.log('new exp before rec', expression);
-            // calculateNum(expression);
             changes = true;
-
-            // calculateNum(expression);
-            // let addExpression = expression.split('+');
-            // newSum = +addExpression[0] + +addExpression[1];
             break;
           case '-':
-            let minusExpression = expression.split('-');
-            // newSum = +minusExpression[0] - +minusExpression[1];
+            expression = calculateOperator(i, expression, '-');
+            changes = true;
             break;
           default:
             break;
@@ -146,28 +241,14 @@ const ButtonCalc = ({ btn, setDisplayValue, displayValue }) => {
       } else {
         return expression;
       }
-      // return changes ? calculateNum(expression) : changes;
-      // console.log(newSum);
-      // replace ^ with **
-      // const updatedExpression = expression.replace('^', '**');
-
-      // // calulate the display value
-      // // eslint-disable-next-line no-new-func
-      // const evaluatedNum = new Function(
-      //   `'use strict'; return (${updatedExpression})`
-      // )();
     } catch (error) {
-      // if there is an error, display empty screen
-      // setDisplayValue('');
       console.log(error);
     }
-    // return expression;
-    // console.log('display', expression);
-    // setDisplayValue(expression);
   };
 
   const showNum = (expression) => {
-    const calculated = calculateNum(expression);
+    const multiplyCaluclated = calculate2nd(expression);
+    const calculated = calculateNum(multiplyCaluclated);
     console.log('going to display', calculated);
     setDisplayValue(calculated);
   };
