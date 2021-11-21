@@ -195,36 +195,193 @@ const ButtonCalc = ({ btn, setDisplayValue, displayValue }) => {
     return substituteExpression;
   };
 
+  // const calculate4th = (expression) => {
+  //   let openingParen;
+  //   let closingParen;
+  //   let center = Math.floor(expression.length / 2);
+  //   console.log('center', center);
+  //   let existsOpeningParen = false;
+  //   let existsClosingParen = false;
+  //   for (let i = center; i >= 0; i--) {
+  //     let num = expression[i];
+  //     switch (num) {
+  //       case '(':
+  //         openingParen = i;
+  //         existsOpeningParen = true;
+  //     }
+  //   }
+  //   for (let i = center; i < expression.length; i++) {
+  //     let num = expression[i];
+  //     switch (num) {
+  //       case ')':
+  //         closingParen = i;
+  //         existsClosingParen = true;
+  //         let expressionSub = expression.substring(
+  //           openingParen,
+  //           closingParen + 1
+  //         );
+
+  //         let expressionCalc = expression.substring(
+  //           openingParen + 1,
+  //           closingParen
+  //         );
+  //         console.log('going into paren');
+  //         console.log('first exp', expressionCalc);
+  //         const exponentCalculated = calculate3rd(expressionCalc);
+  //         const multiplyCaluclated = calculate2nd(exponentCalculated);
+  //         const calculated = calculateNum(multiplyCaluclated);
+  //         expression = expression.replace(expressionSub, calculated);
+  //     }
+  //   }
+
+  //   if (existsOpeningParen && existsClosingParen) {
+  //     console.log('going to recurison');
+  //     console.log('nex expression', expression);
+  //     return calculate4th(expression);
+  //   } else {
+  //     return expression;
+  //   }
+  // };
+
   const calculate4th = (expression) => {
-    let openingParen;
+    let openingParenArray = [];
     let closingParen;
+    let openingParen;
+    let existsOpeningParen = false;
+    let existsClosingParen = false;
     for (let i = 0; i < expression.length; i++) {
       let num = expression[i];
       switch (num) {
         case '(':
-          openingParen = i;
-      }
-    }
-    for (let i = expression.length - 1; i >= 0; i--) {
-      let num = expression[i];
-      switch (num) {
+          openingParenArray.push(i);
+          console.log('pushd');
+          existsOpeningParen = true;
+          break;
         case ')':
           closingParen = i;
+          openingParen = openingParenArray[openingParenArray.length - 1];
+
+          console.log('opening', openingParen);
+          existsClosingParen = true;
+          console.log('closing');
+          console.log(openingParenArray);
+          if (openingParenArray.length > 0) {
+            console.log('going to eval');
+            let expressionSub = expression.substring(
+              openingParen,
+              closingParen + 1
+            );
+            console.log('sub', expressionSub);
+            let expressionCalc = expression.substring(
+              openingParen + 1,
+              closingParen
+            );
+            console.log('going into paren');
+            console.log('first exp', expressionCalc);
+            const exponentCalculated = calculate3rd(expressionCalc);
+            const multiplyCaluclated = calculate2nd(exponentCalculated);
+            const calculated = calculateNum(multiplyCaluclated);
+            expression = expression.replace(expressionSub, calculated);
+            openingParenArray.pop();
+          }
       }
     }
-    let expressionSub = expression.substring(openingParen, closingParen + 1);
-
-    let expressionCalc = expression.substring(openingParen + 1, closingParen);
-    const exponentCalculated = calculate3rd(expressionCalc);
-    const multiplyCaluclated = calculate2nd(exponentCalculated);
-    const calculated = calculateNum(multiplyCaluclated);
-    // console.log('paren', calculated);
-    let substituteExpression = expression.replace(expressionSub, calculated);
-    console.log('sub paren');
-    return substituteExpression;
+    if (existsOpeningParen && existsClosingParen) {
+      console.log('going to recurison');
+      console.log('nex expression', expression);
+      return calculate4th(expression);
+    } else {
+      return expression;
+    }
   };
+  //   for (let i = center; i < expression.length; i++) {
+  //     let num = expression[i];
+  //     switch (num) {
+  //       case ')':
+  //         closingParen = i;
+  //         existsClosingParen = true;
+  //         let expressionSub = expression.substring(
+  //           openingParen,
+  //           closingParen + 1
+  //         );
+
+  //         let expressionCalc = expression.substring(
+  //           openingParen + 1,
+  //           closingParen
+  //         );
+  //         console.log('going into paren');
+  //         console.log('first exp', expressionCalc);
+  //         const exponentCalculated = calculate3rd(expressionCalc);
+  //         const multiplyCaluclated = calculate2nd(exponentCalculated);
+  //         const calculated = calculateNum(multiplyCaluclated);
+  //         expression = expression.replace(expressionSub, calculated);
+  //     }
+  //   }
+
+  //   if (existsOpeningParen && existsClosingParen) {
+  //     console.log('going to recurison');
+  //     console.log('nex expression', expression);
+  //     return calculate4th(expression);
+  //   } else {
+  //     return expression;
+  //   }
+  // };
+
+  // const calculate4th = (expression) => {
+  //   let openingParen;
+  //   let closingParen;
+  //   let existsOpeningParen = false;
+  //   let existsClosingParen = false;
+  //   let needToEvaluate = true;
+
+  //   while (needToEvaluate) {
+  //     let i = 0;
+  //     let num = expression[i];
+  //     switch (num) {
+  //       case '(':
+  //         openingParen = i;
+  //         existsOpeningParen = true;
+  //         break;
+  //       case ')':
+  //         closingParen = i;
+  //         existsClosingParen = true;
+  //         if (existsOpeningParen) {
+  //           let expressionSub = expression.substring(
+  //             openingParen,
+  //             closingParen + 1
+  //           );
+
+  //           let expressionCalc = expression.substring(
+  //             openingParen + 1,
+  //             closingParen
+  //           );
+  //           console.log('going into paren');
+  //           console.log('first exp', expressionCalc);
+  //           const exponentCalculated = calculate3rd(expressionCalc);
+  //           const multiplyCaluclated = calculate2nd(exponentCalculated);
+  //           const calculated = calculateNum(multiplyCaluclated);
+  //           expression = expression.replace(expressionSub, calculated);
+  //           needToEvaluate = false;
+  //         }
+  //         break;
+  //     }
+  //     if (i === expression.length - 1) {
+  //       needToEvaluate = false;
+  //     }
+  //     i++;
+  //   }
+
+  //   if (existsOpeningParen && existsClosingParen) {
+  //     console.log('going to recurison');
+  //     console.log('nex expression', expression);
+  //     return calculate4th(expression);
+  //   } else {
+  //     return expression;
+  //   }
+  // };
 
   const calculate3rd = (expression) => {
+    console.log('expression', expression);
     let changes = false;
     for (let i = 0; i < expression.length; i++) {
       let num = expression[i];
@@ -301,6 +458,8 @@ const ButtonCalc = ({ btn, setDisplayValue, displayValue }) => {
 
   const showNum = (expression) => {
     const parenCalculated = calculate4th(expression);
+    console.log('finished paren');
+    console.log(parenCalculated);
     const exponentCalculated = calculate3rd(parenCalculated);
     const multiplyCaluclated = calculate2nd(exponentCalculated);
     const calculated = calculateNum(multiplyCaluclated);
