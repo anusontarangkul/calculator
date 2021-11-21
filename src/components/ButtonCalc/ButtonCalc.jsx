@@ -184,11 +184,64 @@ const ButtonCalc = ({ btn, setDisplayValue, displayValue }) => {
         addExpression = expressionCalc.split('/');
         newSum = (+addExpression[0] / +addExpression[1]).toString();
         break;
+      case '^':
+        addExpression = expressionCalc.split('^');
+        newSum = ((+addExpression[0]) ** +addExpression[1]).toString();
+        break;
       default:
         break;
     }
     let substituteExpression = expression.replace(expressionCalc, newSum);
     return substituteExpression;
+  };
+
+  const calculate4th = (expression) => {
+    let openingParen;
+    let closingParen;
+    for (let i = 0; i < expression.length; i++) {
+      let num = expression[i];
+      switch (num) {
+        case '(':
+          openingParen = i;
+      }
+    }
+    for (let i = expression.length - 1; i >= 0; i--) {
+      let num = expression[i];
+      switch (num) {
+        case ')':
+          closingParen = i;
+      }
+    }
+    let expressionSub = expression.substring(openingParen, closingParen + 1);
+
+    let expressionCalc = expression.substring(openingParen + 1, closingParen);
+    const exponentCalculated = calculate3rd(expressionCalc);
+    const multiplyCaluclated = calculate2nd(exponentCalculated);
+    const calculated = calculateNum(multiplyCaluclated);
+    // console.log('paren', calculated);
+    let substituteExpression = expression.replace(expressionSub, calculated);
+    console.log('sub paren');
+    return substituteExpression;
+  };
+
+  const calculate3rd = (expression) => {
+    let changes = false;
+    for (let i = 0; i < expression.length; i++) {
+      let num = expression[i];
+      switch (num) {
+        case '^':
+          expression = calculateOperator(i, expression, '^');
+          changes = true;
+          break;
+        default:
+          break;
+      }
+    }
+    if (changes) {
+      return calculate3rd(expression);
+    } else {
+      return expression;
+    }
   };
 
   const calculate2nd = (expression) => {
@@ -247,7 +300,9 @@ const ButtonCalc = ({ btn, setDisplayValue, displayValue }) => {
   };
 
   const showNum = (expression) => {
-    const multiplyCaluclated = calculate2nd(expression);
+    const parenCalculated = calculate4th(expression);
+    const exponentCalculated = calculate3rd(parenCalculated);
+    const multiplyCaluclated = calculate2nd(exponentCalculated);
     const calculated = calculateNum(multiplyCaluclated);
     console.log('going to display', calculated);
     setDisplayValue(calculated);
