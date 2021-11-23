@@ -47,8 +47,6 @@ const ButtonCalc = ({ btn, setDisplayValue, displayValue }) => {
   };
 
   const calculateOperator = (multiplySignIndex, expression, operator) => {
-    console.log('index', multiplySignIndex);
-    console.log('operator', operator);
     let beginningSum = 0;
     let endingSum = expression.length - 1;
 
@@ -58,61 +56,43 @@ const ButtonCalc = ({ btn, setDisplayValue, displayValue }) => {
         for (let j = i + 1; j < expression.length; j++) {
           let currentChar = +expression[i];
           if (isNaN(currentChar)) {
-            console.log(j);
-            console.log('find end');
-            console.log('endingSum', endingSum);
             endingSum = j - 2;
           }
         }
       } else if (isNaN(currentChar)) {
-        // if(currentChar === '-' && isNaN(+expression[i+1]) && !isNaN(+expression[i+2]){
-        //   endingSum =
-        // }
         endingSum = i - 1;
       }
     }
     for (let i = multiplySignIndex - 1; i >= 0; i--) {
       let currentChar = +expression[i];
       if (isNaN(currentChar)) {
-        console.log('nan');
-        console.log(currentChar);
         if (expression[i] === '-' && i === 0) {
-          console.log('hit');
           beginningSum = i;
         } else {
-          console.log('reg');
           beginningSum = i + 1;
         }
       }
     }
     let expressionCalc = expression.substring(beginningSum, endingSum + 1);
-    console.log('expcalc', expressionCalc);
     let addExpression;
     let newSum;
     switch (operator) {
       case '+':
         addExpression = expressionCalc.split('+');
-        console.log('add', addExpression);
         newSum = (+addExpression[0] + +addExpression[1]).toString();
         break;
       case '-':
         if (expressionCalc.includes('--')) {
-          console.log('double');
           addExpression = expressionCalc.split('--');
-          console.log(addExpression);
           newSum = (+addExpression[0] + +addExpression[1]).toString();
         } else {
           addExpression = expressionCalc.split('-');
-
           if (addExpression.length === 3) {
-            console.log('splitting');
             newSum = (+addExpression[1] * -1 - +addExpression[2]).toString();
           } else {
-            console.log(addExpression);
             newSum = (+addExpression[0] - +addExpression[1]).toString();
           }
         }
-
         break;
       case '*':
         addExpression = expressionCalc.split('*');
@@ -133,7 +113,7 @@ const ButtonCalc = ({ btn, setDisplayValue, displayValue }) => {
     return substituteExpression;
   };
 
-  const calculate4th = (expression) => {
+  const calculateParen = (expression) => {
     let openingParenArray = [];
     let closingParen;
     let openingParen;
@@ -160,22 +140,24 @@ const ButtonCalc = ({ btn, setDisplayValue, displayValue }) => {
               openingParen + 1,
               closingParen
             );
-            const exponentCalculated = calculate3rd(expressionCalc);
-            const multiplyCaluclated = calculate2nd(exponentCalculated);
-            const calculated = calculateNum(multiplyCaluclated);
+            const exponentCalculated = calculateExponents(expressionCalc);
+            const multiplyCaluclated = calculateMultiplyDivison(
+              exponentCalculated
+            );
+            const calculated = calculatAdditionSubtraction(multiplyCaluclated);
             expression = expression.replace(expressionSub, calculated);
             openingParenArray.pop();
           }
       }
     }
     if (existsOpeningParen && existsClosingParen) {
-      return calculate4th(expression);
+      return calculateParen(expression);
     } else {
       return expression;
     }
   };
 
-  const calculate3rd = (expression) => {
+  const calculateExponents = (expression) => {
     let changes = false;
     for (let i = 0; i < expression.length; i++) {
       let num = expression[i];
@@ -189,25 +171,23 @@ const ButtonCalc = ({ btn, setDisplayValue, displayValue }) => {
       }
     }
     if (changes) {
-      return calculate3rd(expression);
+      return calculateExponents(expression);
     } else {
       return expression;
     }
   };
 
-  const calculate2nd = (expression) => {
+  const calculateMultiplyDivison = (expression) => {
     let changes = false;
     for (let i = 0; i < expression.length; i++) {
       let num = expression[i];
       switch (num) {
         case '*':
           expression = calculateOperator(i, expression, '*');
-          console.log('new exp before rec', expression);
           changes = true;
           break;
         case '/':
           expression = calculateOperator(i, expression, '/');
-          console.log('new exp before rec', expression);
           changes = true;
           break;
         default:
@@ -215,83 +195,62 @@ const ButtonCalc = ({ btn, setDisplayValue, displayValue }) => {
       }
     }
     if (changes) {
-      return calculate2nd(expression);
+      return calculateMultiplyDivison(expression);
     } else {
       return expression;
     }
   };
 
-  const calculateNum = (expression) => {
+  const calculatAdditionSubtraction = (expression) => {
     let changes = false;
-    try {
-      for (let i = 0; i < expression.length; i++) {
-        let num = expression[i];
-        switch (num) {
-          case '+':
-            expression = calculateOperator(i, expression, '+');
-            console.log('new exp before rec', expression);
-            changes = true;
-            break;
-          case '-':
-            console.log('minus');
-            // does not contain
-            let addExpression = expression.split('-');
-            console.log('add', addExpression);
 
-            if (
-              (typeof +expression[i - 1] === 'number' &&
-                typeof +expression[i + 1] === 'number') ||
-              (typeof +expression[i - 1] === 'number' &&
-                typeof +expression[i + 2] === 'number')
-            ) {
-              if (i === 0) {
-                console.log('break i = 0');
-                break;
-              } else {
-                expression = calculateOperator(i, expression, '-');
-                changes = true;
-              }
-            }
+    for (let i = 0; i < expression.length; i++) {
+      let num = expression[i];
+      switch (num) {
+        case '+':
+          expression = calculateOperator(i, expression, '+');
+          changes = true;
+          break;
+        case '-':
+          if (i === 0) {
             break;
-          default:
-            break;
-        }
+          }
+          if (
+            (typeof +expression[i - 1] === 'number' &&
+              typeof +expression[i + 1] === 'number') ||
+            (typeof +expression[i - 1] === 'number' &&
+              typeof +expression[i + 2] === 'number')
+          ) {
+            expression = calculateOperator(i, expression, '-');
+            changes = true;
+          }
+          break;
+        default:
+          break;
       }
-      if (changes) {
-        return calculateNum(expression);
-      } else {
-        return expression;
-      }
-    } catch (error) {
-      console.log(error);
+    }
+    if (changes) {
+      return calculatAdditionSubtraction(expression);
+    } else {
+      return expression;
     }
   };
-  // const turnNegative = (negativeIndex, expression) => {
-  //   let endingNegativeNum = expression.length - 1;
-  //   for (let i = 0; i++; i < expression.legnth) {
-  //     let currentChar = +expression[i];
-  //     if (isNaN(currentChar)) {
-  //       endingNegativeNum = i - 1;
-  //     }
-  //   }
-  //   let expressionCalc = expression.substring(0, endingNegativeNum + 1);
-  //   console.log('exp', expressionCalc);
-  //   let addExpression;
-  //   let newSum;
-  //   addExpression = expressionCalc.split('-');
-  //   newSum = +addExpression[0] * -1;
-  //   console.log('newSum', newSum);
-  //   let substituteExpression = expression.replace(expressionCalc, newSum);
-
-  //   return substituteExpression;
-  // };
 
   const showNum = (expression) => {
-    const parenCalculated = calculate4th(expression);
-    const exponentCalculated = calculate3rd(parenCalculated);
-    const multiplyCaluclated = calculate2nd(exponentCalculated);
-    const calculated = calculateNum(multiplyCaluclated);
-    setDisplayValue(calculated);
+    try {
+      const parenCalculated = calculateParen(expression);
+      const exponentCalculated = calculateExponents(parenCalculated);
+      const multiplyCaluclated = calculateMultiplyDivison(exponentCalculated);
+      const calculated = calculatAdditionSubtraction(multiplyCaluclated);
+      const checkError = isNaN(+calculated);
+      if (checkError) {
+        setDisplayValue('Invalid');
+      } else {
+        setDisplayValue(calculated);
+      }
+    } catch {
+      setDisplayValue('');
+    }
   };
   // checks to see if previous character was a operator
   // prevents another operator to be entered consecutively.
