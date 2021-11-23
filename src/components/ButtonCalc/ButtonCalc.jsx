@@ -181,6 +181,9 @@ const ButtonCalc = ({ btn, setDisplayValue, displayValue }) => {
             expression = expression.replace(expressionSub, calculated);
             openingParenArray.pop();
           }
+          break;
+        default:
+          break;
       }
     }
     if (existsOpeningParen && existsClosingParen) {
