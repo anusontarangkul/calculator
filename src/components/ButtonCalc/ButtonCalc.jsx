@@ -56,17 +56,17 @@ const ButtonCalc = ({ btn, setDisplayValue, displayValue }) => {
       if (expression[i] === '-' && !isNaN(+expression[i + 1])) {
         for (let j = i + 1; j < expression.length; j++) {
           let currentChar = +expression[i];
-          if (isNaN(currentChar)) {
+          if (isNaN(currentChar) && expression[i] !== '.') {
             endingIndex = j - 2;
           }
         }
-      } else if (isNaN(currentChar)) {
+      } else if (isNaN(currentChar) && expression[i] !== '.') {
         endingIndex = i - 1;
       }
     }
     for (let i = operatorIndex - 1; i >= 0; i--) {
       let currentChar = +expression[i];
-      if (isNaN(currentChar)) {
+      if (isNaN(currentChar) && expression[i] !== '.') {
         if (expression[i] === '-' && i === 0) {
           beginningIndex = i;
         } else {
@@ -282,7 +282,9 @@ const ButtonCalc = ({ btn, setDisplayValue, displayValue }) => {
       if (checkError) {
         setDisplayValue('Invalid');
       } else {
-        setDisplayValue(calculated);
+        // round decimals
+        const roundedCalc = Math.round(calculated * 100) / 100;
+        setDisplayValue(roundedCalc);
       }
     } catch {
       setDisplayValue('Invalid');
