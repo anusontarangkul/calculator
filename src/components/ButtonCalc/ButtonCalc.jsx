@@ -46,72 +46,104 @@ const ButtonCalc = ({ btn, setDisplayValue, displayValue }) => {
     }
   };
 
-  const calculateOperator = (multiplySignIndex, expression, operator) => {
-    let beginningSum = 0;
-    let endingSum = expression.length - 1;
+  const calculateOperator = (operatorIndex, expression, operator) => {
+    // loop backwards and forwards from the operator to find substring
+    let beginningIndex = 0;
+    let endingIndex = expression.length - 1;
 
-    for (let i = multiplySignIndex + 1; i < expression.length; i++) {
+    for (let i = operatorIndex + 1; i < expression.length; i++) {
       let currentChar = +expression[i];
       if (expression[i] === '-' && !isNaN(+expression[i + 1])) {
         for (let j = i + 1; j < expression.length; j++) {
           let currentChar = +expression[i];
           if (isNaN(currentChar)) {
-            endingSum = j - 2;
+            endingIndex = j - 2;
           }
         }
       } else if (isNaN(currentChar)) {
-        endingSum = i - 1;
+        endingIndex = i - 1;
       }
     }
-    for (let i = multiplySignIndex - 1; i >= 0; i--) {
+    for (let i = operatorIndex - 1; i >= 0; i--) {
       let currentChar = +expression[i];
       if (isNaN(currentChar)) {
         if (expression[i] === '-' && i === 0) {
-          beginningSum = i;
+          beginningIndex = i;
         } else {
-          beginningSum = i + 1;
+          beginningIndex = i + 1;
         }
       }
     }
-    let expressionCalc = expression.substring(beginningSum, endingSum + 1);
-    let addExpression;
-    let newSum;
+    // use indices calculated to find supbstring
+    let expressionCalc = expression.substring(beginningIndex, endingIndex + 1);
+    let subExpression;
+    let calculatedValue;
+
+    // perform calculation of substring based on operator
     switch (operator) {
       case '+':
-        addExpression = expressionCalc.split('+');
-        newSum = (+addExpression[0] + +addExpression[1]).toString();
+        subExpression = expressionCalc.split('+');
+        if (subExpression[0] === '' || subExpression[1] === '') {
+          return 'Invalid';
+        }
+        calculatedValue = (+subExpression[0] + +subExpression[1]).toString();
         break;
       case '-':
         if (expressionCalc.includes('--')) {
-          addExpression = expressionCalc.split('--');
-          newSum = (+addExpression[0] + +addExpression[1]).toString();
+          subExpression = expressionCalc.split('--');
+          calculatedValue = (+subExpression[0] + +subExpression[1]).toString();
         } else {
-          addExpression = expressionCalc.split('-');
-          if (addExpression.length === 3) {
-            newSum = (+addExpression[1] * -1 - +addExpression[2]).toString();
+          subExpression = expressionCalc.split('-');
+          if (subExpression.length === 3) {
+            calculatedValue = (
+              +subExpression[1] * -1 -
+              +subExpression[2]
+            ).toString();
           } else {
-            newSum = (+addExpression[0] - +addExpression[1]).toString();
+            subExpression = expressionCalc.split('-');
+            if (subExpression[1] === '') {
+              return 'Invalid';
+            }
+            calculatedValue = (
+              +subExpression[0] - +subExpression[1]
+            ).toString();
           }
         }
         break;
       case '*':
-        addExpression = expressionCalc.split('*');
-        newSum = (+addExpression[0] * +addExpression[1]).toString();
+        subExpression = expressionCalc.split('*');
+        if (subExpression[0] === '' || subExpression[1] === '') {
+          return 'Invalid';
+        }
+        console.log('sub', subExpression);
+        calculatedValue = (+subExpression[0] * +subExpression[1]).toString();
         break;
       case '/':
-        addExpression = expressionCalc.split('/');
-        newSum = (+addExpression[0] / +addExpression[1]).toString();
+        subExpression = expressionCalc.split('/');
+        if (subExpression[0] === '' || subExpression[1] === '') {
+          return 'Invalid';
+        }
+        calculatedValue = (+subExpression[0] / +subExpression[1]).toString();
         break;
       case '^':
-        addExpression = expressionCalc.split('^');
-        newSum = ((+addExpression[0]) ** +addExpression[1]).toString();
+        subExpression = expressionCalc.split('^');
+        if (subExpression[0] === '' || subExpression[1] === '') {
+          return 'Invalid';
+        }
+        calculatedValue = ((+subExpression[0]) ** +subExpression[1]).toString();
         break;
       default:
         break;
     }
-    let substituteExpression = expression.replace(expressionCalc, newSum);
+    // replaced the calculated value with the substring
+    let substituteExpression = expression.replace(
+      expressionCalc,
+      calculatedValue
+    );
     return substituteExpression;
   };
+
+  // use recrusive approach for Order of Operations
 
   const calculateParen = (expression) => {
     let openingParenArray = [];
@@ -123,6 +155,7 @@ const ButtonCalc = ({ btn, setDisplayValue, displayValue }) => {
       let num = expression[i];
       switch (num) {
         case '(':
+          // used stack to keep track of parenthesis
           openingParenArray.push(i);
           existsOpeningParen = true;
           break;
@@ -238,10 +271,13 @@ const ButtonCalc = ({ btn, setDisplayValue, displayValue }) => {
 
   const showNum = (expression) => {
     try {
+      // calculate expression using order of operations
       const parenCalculated = calculateParen(expression);
       const exponentCalculated = calculateExponents(parenCalculated);
       const multiplyCaluclated = calculateMultiplyDivison(exponentCalculated);
       const calculated = calculatAdditionSubtraction(multiplyCaluclated);
+
+      // check if finaly value is number, if it's not, display invalid
       const checkError = isNaN(+calculated);
       if (checkError) {
         setDisplayValue('Invalid');
@@ -249,7 +285,7 @@ const ButtonCalc = ({ btn, setDisplayValue, displayValue }) => {
         setDisplayValue(calculated);
       }
     } catch {
-      setDisplayValue('');
+      setDisplayValue('Invalid');
     }
   };
   // checks to see if previous character was a operator

@@ -161,7 +161,7 @@ describe('CalculatorComponent', () => {
         expect(displayEl.textContent).toBe('2.');
     })
 
-    test('displays empty screen if invalid expression is entered', () => {
+    test('displays invalid if invalid expression is entered', () => {
         const { getByTestId } = render(<CaclulatorContainer />);
 
         const displayEl = getByTestId('display');
@@ -173,6 +173,6 @@ describe('CalculatorComponent', () => {
         fireEvent.click(multiplicationlEl);
         fireEvent.click(equalEl);
 
-        expect(displayEl.textContent).toBe('');
+        expect(displayEl.textContent).toBe('Invalid');
     })
 })
